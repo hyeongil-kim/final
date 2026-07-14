@@ -47,17 +47,10 @@ def load_quiz_questions():
 
 questions = load_quiz_questions()
 
-# 상태 초기화
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
 if "current_question" not in st.session_state:
     st.session_state.current_question = 0
 if "user_answers" not in st.session_state:
     st.session_state.user_answers = []
-if "student_id" not in st.session_state:
-    st.session_state.student_id = ""
-if "student_name" not in st.session_state:
-    st.session_state.student_name = ""
 
 def quiz_screen():
     st.write("---")
@@ -79,7 +72,7 @@ def quiz_screen():
             st.rerun()
 
 def show_result():
-    st.subheader(f"🎉 {st.session_state.student_name}님의 취향을 분석한 결과입니다!")
+    st.subheader("🎉 당신의 취향을 분석한 결과입니다!")
     
     if len(st.session_state.user_answers) == 3:
         payload = {
@@ -107,20 +100,9 @@ def show_result():
     
     st.write("---")
     
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("테스트 다시 하기", use_container_width=True):
-            st.session_state.current_question = 0
-            st.session_state.user_answers = []
-            st.rerun()
-    with col2:
-        if st.button("로그아웃", use_container_width=True):
-            st.session_state.logged_in = False
-            st.session_state.current_question = 0
-            st.session_state.user_answers = []
-            st.rerun()
+    if st.button("테스트 다시 하기", use_container_width=True):
+        st.session_state.current_question = 0
+        st.session_state.user_answers = []
+        st.rerun()
 
-if not st.session_state.logged_in:
-    login_screen()
-else:
-    quiz_screen()
+quiz_screen()
