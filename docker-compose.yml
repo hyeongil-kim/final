@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./back
+    container_name: cocktail-backend
+    ports:
+      - "8000:8000"
+    networks:
+      - cocktail-network
+
+  frontend:
+    build: ./front
+    container_name: cocktail-frontend
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    networks:
+      - cocktail-network
+
+networks:
+  cocktail-network:
+    driver: bridge
