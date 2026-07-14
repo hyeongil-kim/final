@@ -31,18 +31,15 @@ abv_options = {
 
 st.subheader("당신의 취향을 스크롤바로 선택해주세요!")
 
-
 selected_base_label = st.select_slider(
     "**Q1. 선호하거나 도전해보고 싶은 메인 술(기주)은?**",
     options=list(base_options.keys())
 )
 
-
 selected_taste_label = st.select_slider(
     "**Q2. 혀끝에서 느껴지는 맛 중 가장 끌리는 것은?**",
     options=list(taste_options.keys())
 )
-
 
 selected_abv_label = st.select_slider(
     "**Q3. 오늘 원하는 알코올 도수의 강도는?**",
@@ -50,7 +47,6 @@ selected_abv_label = st.select_slider(
 )
 
 st.write("---")
-
 
 if st.button("🍸 내 취향에 맞는 칵테일 추천받기", use_container_width=True):
     payload = {
