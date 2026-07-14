@@ -29,11 +29,12 @@ abv_options = {
     "완전히 취하고 싶을 때 (LV4)": "LV4"
 }
 
-st.subheader("당신의 취향을 스크롤바로 선택해주세요!")
+st.subheader("당신의 취향을 선택해주세요!")
 
-selected_base_label = st.select_slider(
+selected_base_label = st.radio(
     "**Q1. 선호하거나 도전해보고 싶은 메인 술(기주)은?**",
-    options=list(base_options.keys())
+    options=list(base_options.keys()),
+    horizontal=True 
 )
 
 selected_taste_label = st.select_slider(
@@ -49,6 +50,7 @@ selected_abv_label = st.select_slider(
 st.write("---")
 
 if st.button("🍸 내 취향에 맞는 칵테일 추천받기", use_container_width=True):
+  
     payload = {
         "base": base_options[selected_base_label],
         "taste": taste_options[selected_taste_label],
