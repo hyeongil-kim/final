@@ -59,33 +59,9 @@ if "student_id" not in st.session_state:
 if "student_name" not in st.session_state:
     st.session_state.student_name = ""
 
-def login_screen():
-    st.subheader("칵테일 테스트를 시작하려면 정보를 입력해주세요")
-    
-    VALID_ID = "2022203011"
-    VALID_NAME = "김형일"
-    
-    with st.form("login_form"):
-        input_id = st.text_input("본인의 학번을 입력하세요")
-        input_name = st.text_input("본인의 이름을 입력하세요")
-        submit_btn = st.form_submit_button("테스트 시작")
-        
-        if submit_btn:
-            if input_id.strip() == "" or input_name.strip() == "":
-                st.error("학번과 이름을 모두 정확히 입력해주세요.")
-            elif input_id.strip() == VALID_ID and input_name.strip() == VALID_NAME:
-                st.session_state.student_id = input_id
-                st.session_state.student_name = input_name
-                st.session_state.logged_in = True
-                st.success(f"환영합니다, {input_name}님!")
-                st.rerun() 
-            else:
-                st.error("등록되지 않은 학번이거나 이름이 일치하지 않습니다. 다시 확인해주세요.")
-
 def quiz_screen():
     st.write("---")
     
-    # 문항이 끝나면 결과 화면으로 이동
     if st.session_state.current_question >= len(questions):
         show_result()
         return
@@ -105,20 +81,16 @@ def quiz_screen():
 def show_result():
     st.subheader(f"🎉 {st.session_state.student_name}님의 취향을 분석한 결과입니다!")
     
-    # 3가지 답을 모두 선택했을 경우 백엔드 API에 요청 전송
     if len(st.session_state.user_answers) == 3:
         payload = {
             "base": st.session_state.user_answers[0],
             "taste": st.session_state.user_answers[1],
             "abv": st.session_state.user_answers[2]
         }
-        
-        # docker-compose 안에서는 서비스명('backend')으로 통신 가능
-        # 포트는 backend Dockerfile에 지정한 8000번
+     
         api_url = "http://backend:8000/recommend"
         
         try:
-            # FastAPI 백엔드 호출
             response = requests.post(api_url, json=payload)
             
             if response.status_code == 200:
@@ -135,7 +107,6 @@ def show_result():
     
     st.write("---")
     
-    # 버튼 배치를 위한 컬럼 생성
     col1, col2 = st.columns(2)
     with col1:
         if st.button("테스트 다시 하기", use_container_width=True):
@@ -149,7 +120,6 @@ def show_result():
             st.session_state.user_answers = []
             st.rerun()
 
-# 메인 실행 로직
 if not st.session_state.logged_in:
     login_screen()
 else:
